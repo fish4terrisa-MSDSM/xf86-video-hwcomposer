@@ -59,9 +59,9 @@ Bool hwc_init_hybris_native_buffer(ScrnInfoPtr pScrn)
     HWCPtr hwc = HWCPTR(pScrn);
     hwc_renderer_ptr renderer = &hwc->renderer;
 
-    if (strstr(eglQueryString(renderer->display, EGL_EXTENSIONS), "EGL_HYBRIS_native_buffer") == NULL)
+    if (strstr(eglQueryString(renderer->display, EGL_EXTENSIONS), "EGL_HYBRIS_native_buffer2") == NULL)
     {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "EGL_HYBRIS_native_buffer is missing. Make sure libhybris EGL implementation is used\n");
+        xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "EGL_HYBRIS_native_buffer2 is missing. Make sure libhybris EGL implementation is used\n");
         return FALSE;
     }
 
@@ -348,6 +348,7 @@ void *hwc_egl_renderer_thread(void *user_data)
         pthread_mutex_unlock(&(hwc->dirtyLock));
 
         pthread_mutex_lock(&(hwc->rendererLock));
+        hwc_toggle_vsync(pScrn,FALSE);
         if (renderer->fence != EGL_NO_SYNC_KHR) {
             eglClientWaitSyncKHR(renderer->display,
                 renderer->fence,

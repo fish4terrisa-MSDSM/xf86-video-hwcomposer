@@ -16,6 +16,7 @@
 #include <android-config.h>
 #include <sync/sync.h>
 #include <hybris/hwcomposerwindow/hwcomposer.h>
+#include <android/nativebase/nativebase.h>
 
 #include "driver.h"
 
@@ -109,11 +110,8 @@ Bool hwc_hwcomposer_init(ScrnInfoPtr pScrn)
 	char device[10];
 	memset(device,0,sizeof(device));
 
-	read_file_into("/proc/device-tree/model", device, sizeof (device));
-	if (string_match(device, "MT6873")) {
-        hwc->hwcVersion = HWC_DEVICE_API_VERSION_2_0;
-		return hwc_hwcomposer2_init(pScrn);
-	}
+  hwc->hwcVersion = HWC_DEVICE_API_VERSION_2_0;
+	return hwc_hwcomposer2_init(pScrn);
 
 	hwc_start_fake_surfaceflinger(pScrn);
 

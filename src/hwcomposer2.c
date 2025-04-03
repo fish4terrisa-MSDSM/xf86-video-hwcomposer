@@ -29,6 +29,8 @@ typedef struct
 void hwc2_callback_vsync(HWC2EventListener* listener, int32_t sequenceId,
                          hwc2_display_t display, int64_t timestamp)
 {
+    ScrnInfoPtr pScrn = ((HwcProcs_v20*) listener)->pScrn;
+    hwc_trigger_redraw(pScrn);
 }
 
 void hwc2_callback_hotplug(HWC2EventListener* listener, int32_t sequenceId,
@@ -53,7 +55,9 @@ void hwc2_callback_refresh(HWC2EventListener* listener, int32_t sequenceId,
 
 Bool hwc_hwcomposer2_init(ScrnInfoPtr pScrn)
 {
+    xf86DrvMsg(pScrn->scrnIndex, X_INFO, "hwc_hwcomposer2_init() called\n");
     HWCPtr hwc = HWCPTR(pScrn);
+    hwc->hasVsync = false;
 	int err;
     static int composerSequenceId = 0;
     
@@ -119,7 +123,7 @@ void hwc_present_hwcomposer2(void *user_data, struct ANativeWindow *window,
     int acquireFenceFd = HWCNativeBufferGetFence(buffer);
 
     hwc2_compat_display_t* hwcDisplay = hwc->hwc2_primary_display;
-
+    hwc_set_power_mode_hwcomposer2(pScrn, HWC_DISPLAY_PRIMARY, HWC2_POWER_MODE_ON);
     error = hwc2_compat_display_validate(hwcDisplay, &numTypes,
                                                     &numRequests);
     if (error != HWC2_ERROR_NONE && error != HWC2_ERROR_HAS_CHANGES) {

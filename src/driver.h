@@ -14,6 +14,7 @@
 #include <android-config.h>
 
 #define MESA_EGL_NO_X11_HEADERS 1
+#define EGL_NO_X11
 #include <epoxy/gl.h>
 #include <epoxy/egl.h>
 #include <hardware/hardware.h>
@@ -37,7 +38,7 @@ typedef struct _color
     int green;
     int blue;
 } dummy_colors;
-
+void hwc_toggle_vsync(ScrnInfoPtr pScrn,bool toggle);
 void hwc_trigger_redraw(ScrnInfoPtr pScrn);
 Bool hwc_display_pre_init(ScrnInfoPtr pScrn);
 Bool hwc_hwcomposer_init(ScrnInfoPtr pScrn);
@@ -165,6 +166,7 @@ typedef struct HWCRec
     pthread_mutex_t rendererLock;
     pthread_mutex_t dirtyLock;
     pthread_cond_t dirtyCond;
+    Bool hasVsync;
 } HWCRec, *HWCPtr;
 
 /* The privates of the hwcomposer driver */
