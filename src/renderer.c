@@ -53,7 +53,30 @@ static const GLfloat textureVertices[][8] = {
 };
 
 GLfloat cursorVertices[8];
-
+#define CASE_STR( value ) case value: return #value; 
+const char* eglGetErrorString( EGLint error )
+{
+    switch( error )
+    {
+    CASE_STR( EGL_SUCCESS             )
+    CASE_STR( EGL_NOT_INITIALIZED     )
+    CASE_STR( EGL_BAD_ACCESS          )
+    CASE_STR( EGL_BAD_ALLOC           )
+    CASE_STR( EGL_BAD_ATTRIBUTE       )
+    CASE_STR( EGL_BAD_CONTEXT         )
+    CASE_STR( EGL_BAD_CONFIG          )
+    CASE_STR( EGL_BAD_CURRENT_SURFACE )
+    CASE_STR( EGL_BAD_DISPLAY         )
+    CASE_STR( EGL_BAD_SURFACE         )
+    CASE_STR( EGL_BAD_MATCH           )
+    CASE_STR( EGL_BAD_PARAMETER       )
+    CASE_STR( EGL_BAD_NATIVE_PIXMAP   )
+    CASE_STR( EGL_BAD_NATIVE_WINDOW   )
+    CASE_STR( EGL_CONTEXT_LOST        )
+    default: return "Unknown";
+    }
+}
+#undef CASE_STR
 Bool hwc_init_hybris_native_buffer(ScrnInfoPtr pScrn)
 {
     HWCPtr hwc = HWCPTR(pScrn);
@@ -195,7 +218,7 @@ void hwc_egl_renderer_screen_init(ScreenPtr pScreen)
     hwc_renderer_ptr renderer = &hwc->renderer;
 
     int result = eglMakeCurrent(renderer->display, renderer->surface, renderer->surface, renderer->renderContext);
-    printf("%d %d\n", result, eglGetError());
+    printf("%d %s\n", result, eglGetErrorString(eglGetError()));
     assert(result == EGL_TRUE);
 
     glBindTexture(GL_TEXTURE_2D, renderer->rootTexture);
