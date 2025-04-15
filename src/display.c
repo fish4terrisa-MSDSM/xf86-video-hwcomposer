@@ -154,7 +154,7 @@ hwc_output_dpms(xf86OutputPtr output, int mode)
      //   hwc_trigger_redraw(pScrn);
     if (mode == DPMSModeOn) {
         pthread_mutex_lock(&(hwc->rendererLock));
-        hwc_toggle_vsync(pScrn, TRUE);
+        hwc_toggle_vsync(pScrn, FALSE);
         pthread_mutex_unlock(&(hwc->rendererLock));
     }
 }
