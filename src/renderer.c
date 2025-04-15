@@ -432,6 +432,7 @@ void hwc_egl_renderer_screen_close(ScreenPtr pScreen)
         renderer->eglDestroyImageKHR(renderer->display, renderer->image);
         renderer->image = EGL_NO_IMAGE_KHR;
     }
+    eglMakeCurrent(renderer->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 }
 
 void hwc_egl_renderer_close(ScrnInfoPtr pScrn)
